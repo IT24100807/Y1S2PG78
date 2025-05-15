@@ -55,6 +55,8 @@
     </div>
 </div>
 
+
+<!-- Add/Edit User Modal -->
 <!-- Add/Edit User Modal -->
 <div id="userModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
