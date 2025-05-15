@@ -1,0 +1,8 @@
+1|Rumana Azmi|IT24100807@my.sliit.lk|rumana123|Admin|2025-05-14T21:44:54.406298300
+2|Dinithi Weerasinghe|IT24100671@my.sliit.lk|dinithi123|Admin|2025-05-14T21:44:54.406298300
+3|Sahasra Senadheera|IT24100061@my.sliit.li|sahasra123|Admin|2025-05-14T21:44:54.406298300
+4|Tharushi Pabasara|IT24100818@my.sliit.lk|tharushi123|Admin|2025-05-14T21:44:54.406298300
+5|Saranya Bharathy|IT24100252@my.sliit.lk|saranya123|Admin|2025-05-14T21:44:54.406298300
+6|Chamodi Dewmini|IT24100039@my.sliit.lk|chamodi123|Admin|2025-05-14T21:44:54.406298300
+7|Bimandi Bosilu|bimandi@gmail.com|bimandi|Teacher|2025-05-14T21:44:54.406298300
+8|Irushi Umanda|irushi@gmail.com|irushi|Student|2025-05-14T21:44:54.404252
