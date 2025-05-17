@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feedback Report</title>
+  <link rel="stylesheet" href="/styles/feedback.css" />
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      color: white;
+    }
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      text-align: left;
+    }
+    th {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+    }
+    caption {
+      caption-side: top;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    #averageRating {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: center;
+      color: #00ff99;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+  <nav class="navbar">
+    <a href="/feedback">Feedback</a>
+    <a href="/report">Report</a>
+    <a href="/admin">Admin</a>
+  </nav>
+
+<div class="container">
+  <h1>Feedback Report</h1>
+  <table id="feedbackTable">
+    <caption>All Student Feedback (Sorted by Rating)</caption>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Student ID</th>
+      <th>Rating</th>
+      <th>Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Filled dynamically -->
+    </tbody>
+  </table>
+  <div id="averageRating">Average Rating: --</div>
+</div></div>
+
+<script>
+  async function loadFeedback() {
+    try {
+      const res = await fetch('/api/feedback/all');
+      const feedbackList = await res.json();
+
+      const tbody = document.querySelector('#feedbackTable tbody');
+      tbody.innerHTML = '';
+
+      feedbackList.forEach(fb => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+                        <td>${fb.studentName}</td>
+                        <td>${fb.studentId}</td>
+                        <td>${fb.rating}</td>
+                        <td>${fb.comment}</td>
+                    `;
+        tbody.appendChild(tr);
+      });
+
+      // Fetch and display average rating
+      const avgRes = await fetch('/api/feedback/average');
+      const average = await avgRes.json();
+      document.getElementById('averageRating').textContent = `Average Rating: ${average.toFixed(2)}`;
+
+    } catch (error) {
+      console.error('Error loading feedback:', error);
+      document.getElementById('averageRating').textContent = 'Failed to load feedback data.';
+    }
+  }
+
+  loadFeedback();
+</script>
+</body>
+</html>

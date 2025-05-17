@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/styles/feedback.css">
+  <style>
+
+
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      color: white;
+    }
+
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    #clearBtn {
+      margin-top: 1rem;
+      background-color: crimson;
+    }
+
+    #clearBtn:hover {
+      background-color: darkred;
+    }
+
+    #statusMessage {
+      margin-top: 1rem;
+      color: lightgreen;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+  <nav class="navbar">
+    <a href="/feedback">Feedback</a>
+    <a href="/report">Report</a>
+    <a href="/admin">Admin</a>
+  </nav>
+
+<div class="container">
+
+  <h1>Admin Panel</h1>
+
+  <table id="feedbackTable">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Student ID</th>
+      <th>Rating</th>
+      <th>Comment</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button id="clearBtn">Clear All Feedback</button>
+  <p id="statusMessage"></p>
+</div></div>
+
+<script>
+  async function loadFeedback() {
+    const res = await fetch('/api/feedback/all');
+    const list = await res.json();
+    const tbody = document.querySelector('#feedbackTable tbody');
+    tbody.innerHTML = '';
+    list.forEach(fb => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+                    <td>${fb.studentName}</td>
+                    <td>${fb.studentId}</td>
+                    <td>${fb.rating}</td>
+                    <td>${fb.comment}</td>
+                `;
+      tbody.appendChild(row);
+    });
+  }
+
+  document.getElementById('clearBtn').addEventListener('click', async () => {
+    if (confirm("Are you sure you want to delete all feedback?")) {
+      const res = await fetch('/api/feedback/clear', { method: 'DELETE' });
+      const msg = await res.text();
+      document.getElementById('statusMessage').textContent = msg;
+      loadFeedback();
+    }
+  });
+
+  loadFeedback();
+</script>
+</body>
+</html>

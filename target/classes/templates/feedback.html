@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Feedback</title>
+  <link rel="stylesheet" href="/styles/feedback.css">
+</head>
+<body>
+<div class="page-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+  <nav class="navbar">
+    <a href="/feedback">Feedback</a>
+    <a href="/report">Report</a>
+    <a href="/admin">Admin</a>
+  </nav>
+
+
+<div class="container">
+  <h1>Student Feedback Form</h1>
+  <form id="feedbackForm">
+    <label for="studentName">Name</label>
+    <input type="text" id="studentName" name="studentName" required>
+
+    <label for="studentId">Student ID</label>
+    <input type="text" id="studentId" name="studentId" required>
+
+    <label for="rating">Rating</label>
+    <div class="stars" id="starRating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <input type="hidden" id="rating" name="rating" value="0">
+
+    <label for="comment">Comment</label>
+    <textarea id="comment" name="comment" rows="4"></textarea>
+
+    <button type="submit">Submit Feedback</button>
+  </form>
+  <p id="responseMessage"></p>
+</div></div>
+
+<script>
+  const stars = document.querySelectorAll('#starRating span');
+  const ratingInput = document.getElementById('rating');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const value = star.getAttribute('data-value');
+      ratingInput.value = value;
+      stars.forEach(s => {
+        s.style.color = s.getAttribute('data-value') <= value ? 'gold' : '#ccc';
+      });
+    });
+  });
+
+  const form = document.getElementById('feedbackForm');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const data = {
+      studentName: form.studentName.value,
+      studentId: form.studentId.value,
+      rating: parseInt(form.rating.value),
+      comment: form.comment.value
+    };
+
+    const res = await fetch('/api/feedback/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const text = await res.text();
+    document.getElementById('responseMessage').textContent = text;
+    form.reset();
+    ratingInput.value = 0;
+    stars.forEach(s => s.style.color = '#ccc');
+  });
+</script>
+</body>
+</html>
