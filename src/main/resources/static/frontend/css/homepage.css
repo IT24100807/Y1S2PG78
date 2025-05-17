@@ -1,0 +1,200 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace;
+}
+
+body {
+    background-color: #ffffff; /* White background */
+    color: #333;
+    line-height: 1.6;
+}
+
+.page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+    font-weight: 500; /* Made text thicker */
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #007bff; /* Example hover color */
+}
+
+.user-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.dashboard-container {
+    padding: 30px;
+}
+
+.greeting {
+    margin-bottom: 15px; /* Reduced space */
+    text-align: left;
+}
+
+.greeting h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 0px; /* Even tighter spacing */
+}
+
+.greeting p {
+    color: #777;
+    font-size: 1.1em;
+}
+
+.exams-overview, .results-overview, .other-info {
+    background-color: #e6f7e9; /* Light matcha for boxes */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #d3ebd7; /* Slightly darker matcha border */
+}
+
+.exams-overview h2, .results-overview h2, .other-info h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #b7e1cd; /* Matcha border for headings */
+    padding-bottom: 10px;
+}
+
+.exam-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.exam-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.exam-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1.2em;
+    font-weight: bold; /* Bold Science and Mathematics */
+}
+
+.exam-card p {
+    color: #777;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.button-primary {
+    background-color: #ffc14d; /* Light orange */
+    color: #000; /* Black text */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.button-primary:hover {
+    background-color: #e0a800; /* Darker orange */
+}
+
+.results-list {
+    list-style: none;
+    padding: 0;
+}
+
+.results-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.results-list li:last-child {
+    border-bottom: none;
+}
+
+.results-list span {
+    font-size: 1em;
+    color: #555;
+}
+
+.results-list .grade {
+    font-weight: bold;
+    color: #28a745; /* Example grade color */
+}
+
+.button-secondary {
+    text-decoration: none;
+    color: #000; /* Black text */
+    border: 1px solid #ffc14d; /* Light orange border */
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-secondary:hover {
+    background-color: #ffc14d;
+    color: #fff;
+}
+
+.announcement-card {
+    background-color: #c1e1c5; /* Slightly darker matcha for announcements */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    color: #155724;
+    border: 1px solid #a3d1a8;
+    font-weight: bold; /* Bold announcement text */
+}
+
+.exam-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1.2em;
+    font-weight: bold; /* Bold Science and Mathematics */
+}
