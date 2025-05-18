@@ -97,10 +97,13 @@
                 <div class="card-header">
                     <h3 th:text="${exam.id != null} ? 'Edit Exam' : 'Create New Exam'">
                         <i class="fas" th:classappend="${exam.id != null} ? 'fa-edit' : 'fa-plus-circle'"></i>
+                        <span th:if="${examType == 'computer'}"> (Computer-Based)</span>
+                        <span th:if="${examType == 'paper'}"> (On-Paper)</span>
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/exams/save}" th:object="${exam}" method="post">
+                    <form th:action="${examType == 'computer'} ? @{/exams/save-computer} : @{/exams/save-paper}"
+                          th:object="${exam}" method="post">
                         <input type="hidden" th:field="*{id}">
 
                         <div class="mb-3">
@@ -138,6 +141,26 @@
                             </select>
                         </div>
 
+                        <!-- Computer-Based Exam Specific Fields -->
+                        <div th:if="${examType == 'computer'}" class="mb-3">
+                            <label for="softwareRequirements" class="form-label">Software Requirements</label>
+                            <input type="text" class="form-control" id="softwareRequirements"
+                                   th:field="*{softwareRequirements}" required>
+                        </div>
+
+                        <!-- On-Paper Exam Specific Fields -->
+                        <div th:if="${examType == 'paper'}" class="mb-3">
+                            <label for="paperType" class="form-label">Paper Type</label>
+                            <input type="text" class="form-control" id="paperType"
+                                   th:field="*{paperType}" required>
+                        </div>
+
+                        <div th:if="${examType == 'paper'}" class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="requiresAnswerSheet"
+                                   th:field="*{requiresAnswerSheet}">
+                            <label class="form-check-label" for="requiresAnswerSheet">Requires Answer Sheet</label>
+                        </div>
+
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a th:href="@{/exams}" class="btn btn-secondary me-md-2">
                                 <i class="fas fa-times me-1"></i> Cancel
@@ -155,7 +178,7 @@
 
 <footer>
     <div class="container text-center">
-        <p class="mb-0">&copy; 2025 Exam Management System. All rights reserved.</p>
+        <p class="mb-0">&copy; 2023 Exam Management System. All rights reserved.</p>
     </div>
 </footer>
 
