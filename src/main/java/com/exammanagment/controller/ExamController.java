@@ -1,6 +1,6 @@
 package com.exammanagment.controller;
 
-import com.exammanagment.model.Exam;
+import com.exammanagment.model.*;
 import com.exammanagment.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,15 +29,31 @@ public class ExamController {
         return "exam/home";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("exam", new Exam());
+    @GetMapping("/new-computer")
+    public String showCreateComputerForm(Model model) {
+        model.addAttribute("exam", new ComputerBasedExam());
+        model.addAttribute("examType", "computer");
         return "exam/form";
     }
 
-    @PostMapping("/save")
-    public String saveExam(@ModelAttribute Exam exam,
-                           @RequestParam("examDateTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime dateTime) {
+    @GetMapping("/new-paper")
+    public String showCreatePaperForm(Model model) {
+        model.addAttribute("exam", new OnPaperExam());
+        model.addAttribute("examType", "paper");
+        return "exam/form";
+    }
+
+    @PostMapping("/save-computer")
+    public String saveComputerExam(@ModelAttribute ComputerBasedExam exam,
+                                   @RequestParam("examDateTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime dateTime) {
+        exam.setExamDateTime(dateTime);
+        examService.saveExam(exam);
+        return "redirect:/exams";
+    }
+
+    @PostMapping("/save-paper")
+    public String savePaperExam(@ModelAttribute OnPaperExam exam,
+                                @RequestParam("examDateTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime dateTime) {
         exam.setExamDateTime(dateTime);
         examService.saveExam(exam);
         return "redirect:/exams";
@@ -47,7 +63,9 @@ public class ExamController {
     public String showEditForm(@PathVariable Long id, Model model) {
         Optional<Exam> exam = examService.getExamById(id);
         if (exam.isPresent()) {
-            model.addAttribute("exam", exam.get());
+            Exam existingExam = exam.get();
+            model.addAttribute("exam", existingExam);
+            model.addAttribute("examType", existingExam instanceof ComputerBasedExam ? "computer" : "paper");
             return "exam/form";
         } else {
             return "redirect:/exams";
