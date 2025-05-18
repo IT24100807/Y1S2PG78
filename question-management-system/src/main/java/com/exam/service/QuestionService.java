@@ -81,4 +81,26 @@ public class QuestionService {
             .orElseThrow(() -> new RuntimeException("Question not found"));
         questionRepository.delete(question);
     }
+    
+    public List<Question> searchQuestions(String topic, String type, String difficulty) {
+        List<Question> questions = getAllQuestions();
+        
+        return questions.stream()
+            .filter(q -> topic == null || q.getTopic().toLowerCase().contains(topic.toLowerCase()))
+            .filter(q -> type == null || q.getClass().getSimpleName().replace("Question", "").equals(type))
+            .filter(q -> difficulty == null || q.getDifficulty().equals(difficulty))
+            .collect(Collectors.toList());
+    }
+    
+    public List<Question> bulkUpload(MultipartFile file) throws IOException {
+        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        
+        // Process each row and create questions
+        // Implementation depends on the Excel structure
+        // This is a placeholder for the actual implementation
+        
+        workbook.close();
+        return getAllQuestions();
+    }
 }
