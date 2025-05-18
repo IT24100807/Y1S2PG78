@@ -1,6 +1,6 @@
 package com.exammanagment.repository;
 
-import com.exammanagment.model.Exam;
+import com.exammanagment.model.*;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -9,53 +9,97 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-        @Repository
-        public class ExamRepository {
+@Repository
+public class ExamRepository {
 
-            private static final String DIRECTORY = "data";
-            private static final String FILE_NAME = "exams.txt";
-            private static final Path FILE_PATH = Paths.get(DIRECTORY, FILE_NAME);
-            private static final String DELIMITER = "\\|";
-            private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String DIRECTORY = "data";
+    private static final String FILE_NAME = "exams.txt";
+    private static final Path FILE_PATH = Paths.get(DIRECTORY, FILE_NAME);
+    private static final String DELIMITER = "\\|";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            public ExamRepository() {
-                initializeFile();
-            }
-
-            private void initializeFile() {
-                try {
-                    if (!Files.exists(FILE_PATH.getParent())) {
-                        Files.createDirectories(FILE_PATH.getParent());
-                    }
-                    if (!Files.exists(FILE_PATH)) {
-                        Files.createFile(FILE_PATH);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            private String toLine(Exam exam) {
-                return String.format("%d|%s|%s|%s|%s|%s|%s",
-                        exam.getId(),
-                        exam.getTitle(),
-                        exam.getDuration(),
-                        exam.getSubject(),
-                        exam.getSyllabus(),
-                        exam.getExamDateTime().format(FORMATTER),
-                        exam.getStatus()
-                );
-            }
-
-            private Exam fromLine(String line) {
-                String[] parts = line.split(DELIMITER);
-                if (parts.length < 7) return null;
-
-                Exam exam = new Exam();
-                exam.setId(Long.parseLong(parts[0]));
-        return exam;
+    public ExamRepository() {
+        initializeFile();
     }
 
+    private void initializeFile() {
+        try {
+            if (!Files.exists(FILE_PATH.getParent())) {
+                Files.createDirectories(FILE_PATH.getParent());
+            }
+            if (!Files.exists(FILE_PATH)) {
+                Files.createFile(FILE_PATH);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String toLine(Exam exam) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(exam.getId()).append("|")
+                .append(exam.getTitle()).append("|")
+                .append(exam.getDuration()).append("|")
+                .append(exam.getSubject()).append("|")
+                .append(exam.getSyllabus()).append("|")
+                .append(exam.getExamDateTime().format(FORMATTER)).append("|")
+                .append(exam.getStatus()).append("|")
+                .append(exam.getExamType());
+
+        if (exam instanceof ComputerBasedExam) {
+            ComputerBasedExam cbe = (ComputerBasedExam) exam;
+            sb.append("|").append(cbe.getSoftwareRequirements());
+        } else if (exam instanceof OnPaperExam) {
+            OnPaperExam ope = (OnPaperExam) exam;
+            sb.append("|").append(ope.getPaperType())
+                    .append("|").append(ope.isRequiresAnswerSheet());
+        }
+
+        return sb.toString();
+    }
+
+    private Exam fromLine(String line) {
+        String[] parts = line.split(DELIMITER);
+        if (parts.length < 8) return null;
+
+        Long id = Long.parseLong(parts[0]);
+        String title = parts[1];
+        String duration = parts[2];
+        String subject = parts[3];
+        String syllabus = parts[4];
+        LocalDateTime examDateTime = LocalDateTime.parse(parts[5], FORMATTER);
+        String status = parts[6];
+        String examType = parts[7];
+
+        if ("Computer-Based".equals(examType) && parts.length >= 9) {
+            ComputerBasedExam exam = new ComputerBasedExam();
+            exam.setId(id);
+            exam.setTitle(title);
+            exam.setDuration(duration);
+            exam.setSubject(subject);
+            exam.setSyllabus(syllabus);
+            exam.setExamDateTime(examDateTime);
+            exam.setStatus(status);
+            exam.setSoftwareRequirements(parts[8]);
+            return exam;
+        } else if ("On-Paper".equals(examType) && parts.length >= 10) {
+            OnPaperExam exam = new OnPaperExam();
+            exam.setId(id);
+            exam.setTitle(title);
+            exam.setDuration(duration);
+            exam.setSubject(subject);
+            exam.setSyllabus(syllabus);
+            exam.setExamDateTime(examDateTime);
+            exam.setStatus(status);
+            exam.setPaperType(parts[8]);
+            exam.setRequiresAnswerSheet(Boolean.parseBoolean(parts[9]));
+            return exam;
+        }
+
+        return null;
+    }
+
+    // Rest of the methods remain the same as they work with Exam interface
     public void saveExam(Exam exam) {
         List<Exam> exams = getAllExams();
         boolean updated = false;
