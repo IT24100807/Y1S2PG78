@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Feedbacks</title>
+    <link rel="stylesheet" href="/styles/feedback.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/feedback.html">Feedback</a>
+    <a href="/feedbacks.html">All Feedbacks</a>
+    <a href="/report.html">Report</a>
+</nav>
+
+<div class="container">
+    <h1>All Feedbacks</h1>
+    <table id="feedbackTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <p id="statusMessage"></p>
+</div>
+
+<script>
+    async function loadFeedbacks() {
+        const res = await fetch('/api/feedback/all');
+        const feedbacks = await res.json();
+        const tbody = document.querySelector('#feedbackTable tbody');
+        tbody.innerHTML = '';
+
+        feedbacks.forEach(fb => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+        <td>${fb.id}</td>
+        <td>${fb.studentName}</td>
+        <td>${fb.studentId}</td>
+        <td>${fb.rating}</td>
+        <td>${fb.comment}</td>
+        <td>
+          <a href="/edit.html?id=${fb.id}" style="color: dodgerblue;">Edit</a>
+        </td>
+      `;
+            tbody.appendChild(row);
+        });
+    }
+
+    loadFeedbacks();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Feedback</title>
+    <link rel="stylesheet" href="/styles/feedback.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/feedback.html">Feedback</a>
+    <a href="/feedbacks.html">All Feedbacks</a>
+    <a href="/report.html">Report</a>
+</nav>
+
+<div class="container">
+    <h1>Edit Feedback</h1>
+    <form id="editForm">
+        <label for="studentName">Name</label>
+        <input type="text" id="studentName" name="studentName" required pattern="[A-Za-z ]+" title="Only letters and spaces allowed">
+
+        <label for="studentId">Student ID</label>
+        <input type="text" id="studentId" name="studentId" required maxlength="10" title="Maximum 10 characters">
+
+        <label for="rating">Rating</label>
+        <div class="stars" id="starRating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+        <input type="hidden" id="rating" name="rating" value="0" />
+
+        <label for="comment">Comment</label>
+        <textarea id="comment" name="comment" rows="4" required></textarea>
+
+        <button type="submit">Save Changes</button>
+    </form>
+    <p id="responseMessage"></p>
+</div>
+
+<script>
+    const stars = document.querySelectorAll('#starRating span');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            ratingInput.value = value;
+            stars.forEach(s => {
+                s.style.color = s.getAttribute('data-value') <= value ? 'gold' : '#ccc';
+            });
+        });
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const feedbackId = urlParams.get('id');
+
+    async function loadFeedback() {
+        const res = await fetch(`/api/feedback/${feedbackId}`);
+        if (!res.ok) {
+            document.getElementById('responseMessage').textContent = "Feedback not found.";
+            return;
+        }
+
+        const feedback = await res.json();
+        document.getElementById('studentName').value = feedback.studentName;
+        document.getElementById('studentId').value = feedback.studentId;
+        document.getElementById('rating').value = feedback.rating;
+        document.getElementById('comment').value = feedback.comment;
+
+        stars.forEach(s => {
+            s.style.color = s.getAttribute('data-value') <= feedback.rating ? 'gold' : '#ccc';
+        });
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const updated = {
+            id: parseInt(feedbackId),
+            studentName: document.getElementById('studentName').value.trim(),
+            studentId: document.getElementById('studentId').value.trim(),
+            rating: parseInt(ratingInput.value),
+            comment: document.getElementById('comment').value.trim()
+        };
+
+        const res = await fetch(`/api/feedback/${feedbackId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updated)
+        });
+
+        const msg = await res.text();
+        document.getElementById('responseMessage').textContent = msg;
+    });
+
+    loadFeedback();
+</script>
+</body>
+</html>

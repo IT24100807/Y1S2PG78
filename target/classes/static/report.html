@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/feedback.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/feedback.html">Feedback</a>
+    <a href="/feedbacks.html">All Feedbacks</a>
+    <a href="/report.html">Report</a>
+</nav>
+
+<div class="container">
+    <h1>Feedback Report</h1>
+    <div id="average">Average Rating: Loading...</div>
+
+    <table id="reportTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Rating</th>
+            <th>Comment</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    async function loadReport() {
+        const avgRes = await fetch('/api/feedback/average');
+        const avg = await avgRes.text();
+        document.getElementById('average').textContent = `Average Rating: ${parseFloat(avg).toFixed(2)} ⭐`;
+
+        const sortedRes = await fetch('/api/feedback/sorted');
+        const feedbacks = await sortedRes.json();
+        const tbody = document.querySelector('#reportTable tbody');
+        tbody.innerHTML = '';
+
+        feedbacks.forEach(fb => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+          <td>${fb.id}</td>
+          <td>${fb.studentName}</td>
+          <td>${fb.studentId}</td>
+          <td>${fb.rating}</td>
+          <td>${fb.comment}</td>
+        `;
+            tbody.appendChild(row);
+        });
+    }
+
+    loadReport();
+</script>
+</body>
+</html>

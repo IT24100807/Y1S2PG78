@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Feedback</title>
+    <link rel="stylesheet" href="/styles/feedback.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/feedback.html">Feedback</a>
+    <a href="/feedbacks.html">All Feedbacks</a>
+    <a href="/report.html">Report</a>
+</nav>
+
+<div class="container">
+    <h1>Submit Your Feedback</h1>
+    <form id="feedbackForm">
+        <label for="studentName">Name</label>
+        <input type="text" id="studentName" name="studentName" required pattern="[A-Za-z ]+" title="Only letters and spaces allowed" />
+
+        <label for="studentId">Student ID</label>
+        <input type="text" id="studentId" name="studentId" required maxlength="10" title="Maximum 10 characters" />
+
+        <label for="rating">Rating</label>
+        <div class="stars" id="starRating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+        <input type="hidden" id="rating" name="rating" value="0" />
+
+        <label for="comment">Comment</label>
+        <textarea id="comment" name="comment" rows="4" required></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+    <p id="responseMessage"></p>
+</div>
+
+<script>
+    const stars = document.querySelectorAll('#starRating span');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            ratingInput.value = value;
+            stars.forEach(s => {
+                s.style.color = s.getAttribute('data-value') <= value ? 'gold' : '#ccc';
+            });
+        });
+    });
+
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (parseInt(ratingInput.value) < 1 || parseInt(ratingInput.value) > 5) {
+            alert("Please select a rating from 1 to 5");
+            return;
+        }
+
+        const data = {
+            studentName: this.studentName.value.trim(),
+            studentId: this.studentId.value.trim(),
+            rating: parseInt(ratingInput.value),
+            comment: this.comment.value.trim()
+        };
+
+        const res = await fetch('/api/feedback/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const message = await res.text();
+        document.getElementById('responseMessage').textContent = message;
+
+        if (res.ok) {
+            this.reset();
+            ratingInput.value = 0;
+            stars.forEach(s => s.style.color = '#ccc');
+        }
+    });
+</script>
+</body>
+</html>
