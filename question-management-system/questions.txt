@@ -1,0 +1,2 @@
+{"questionType":"ESSAY","id":2,"questionText":"swws","marks":88,"difficulty":"EASY","topic":"ss","examId":null,"questionType":"ESSAY","wordLimit":null,"sampleAnswer":null}
+{"questionType":"TRUE_FALSE","id":3,"questionText":"fefef","marks":32,"difficulty":"MEDIUM","topic":"fefe","examId":null,"questionType":"TRUE_FALSE","correctAnswer":null}
