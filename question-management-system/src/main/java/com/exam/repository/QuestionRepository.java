@@ -61,4 +61,47 @@ public class QuestionRepository {
             throw new RuntimeException("Failed to read questions from file", e);
         }
     }
+
+    public Optional<Question> findById(Long id) {
+        return findAll().stream()
+                .filter(q -> q.getId().equals(id))
+                .findFirst();
+    }
+
+    public Question save(Question question) {
+        List<Question> questions = findAll();
+
+        if (question.getId() == null) {
+            // New question - generate ID
+            long newId = questions.stream()
+                    .mapToLong(Question::getId)
+                    .max()
+                    .orElse(0) + 1;
+            question.setId(newId);
+        } else {
+            // Existing question - remove old version
+            questions.removeIf(q -> q.getId().equals(question.getId()));
+        }
+
+        questions.add(question);
+        writeAll(questions);
+        return question;
+    }
+
+    public void delete(Question question) {
+        List<Question> questions = findAll();
+        questions.removeIf(q -> q.getId().equals(question.getId()));
+        writeAll(questions);
+    }
+
+    private void writeAll(List<Question> questions) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(dataFile))) {
+            for (Question question : questions) {
+                String json = objectMapper.writeValueAsString(question);
+                writer.println(json);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write questions to file", e);
+        }
+    }
 }
