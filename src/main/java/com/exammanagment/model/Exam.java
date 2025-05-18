@@ -2,7 +2,7 @@ package com.exammanagment.model;
 
 import java.time.LocalDateTime;
 
-public class Exam {
+public abstract class Exam {
     private Long id;
     private String title;
     private String duration;
@@ -23,6 +23,10 @@ public class Exam {
         this.status = status;
     }
 
+    // Abstract method to get exam type
+    public abstract String getExamType();
+
+    // Getters and Setters (same as before)
     public Long getId() {
         return id;
     }
