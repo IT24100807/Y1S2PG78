@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3F76BF;
+            --dark-color: #001128;
+            --gray-color: #8F8F8F;
+            --light-color: #FFFFFF;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            background-color: var(--dark-color);
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--light-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #2c5a9e;
+            border-color: #2c5a9e;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/exams/home}">
+            <i class="fas fa-book-open me-2"></i>Exam Management
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exams/home}">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exams}">
+                        <i class="fas fa-list me-1"></i> Exams
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/exams/new}">
+                        <i class="fas fa-plus-circle me-1"></i> Create Exam
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><i class="fas fa-book-open me-2"></i>Welcome to Exam Management</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Efficiently manage your exams with our comprehensive system</p>
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-list fa-3x mb-3 text-primary"></i>
+                                    <h5>View Exams</h5>
+                                    <p>Browse all scheduled exams</p>
+                                    <a th:href="@{/exams}" class="btn btn-primary">View Exams</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-plus-circle fa-3x mb-3 text-primary"></i>
+                                    <h5>Create Exam</h5>
+                                    <p>Schedule a new exam</p>
+                                    <a th:href="@{/exams/new}" class="btn btn-primary">Create Exam</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-calendar-alt fa-3x mb-3 text-primary"></i>
+                                    <h5>Manage Exams</h5>
+                                    <p>Edit or delete existing exams</p>
+                                    <a th:href="@{/exams}" class="btn btn-primary">Manage Exams</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2025 Exam Management System. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
